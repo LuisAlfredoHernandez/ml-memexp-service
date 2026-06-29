@@ -1,0 +1,30 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos Virtuales
+.venv/
+venv/
+ENV/
+env/
+
+# Configuración del Entorno local
+.env
+.env.*
+
+# Artefactos del Modelo de ML (Evitar subir archivos binarios pesados que cambian constantemente)
+model_artifacts/*.pkl
+
+# Notebooks y Scripts Temporales
+.ipynb_checkpoints/
+*.ipy
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
