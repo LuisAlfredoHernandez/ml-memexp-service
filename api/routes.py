@@ -106,6 +106,7 @@ async def seed_data():
         # 3. Limpiar datos de seed anteriores para evitar duplicados
         db.execute(text("DELETE FROM reporte_avance WHERE notas = 'Carga Seed'"))
         db.execute(text("DELETE FROM asignacion_orden WHERE notas = 'Carga Seed'"))
+        db.execute(text("DELETE FROM linea_orden WHERE orden_id IN (SELECT id FROM orden WHERE notas = 'Carga Seed')"))
         db.execute(text("DELETE FROM orden WHERE notas = 'Carga Seed'"))
 
         # 4. Insertar 16 órdenes y asignaciones completadas distribuidas en 16 días distintos en el pasado
@@ -131,6 +132,17 @@ async def seed_data():
                 "oid": ord_id,
                 "num": f"ORD-SEED-{1000+i}",
                 "prio": prioridad
+            })
+
+            # Linea de Orden (cada orden debe tener al menos 1 línea de producto)
+            linea_id = uuid.uuid4()
+            db.execute(text("""
+                INSERT INTO linea_orden (id, producto_tipo, descripcion, cantidad, cantidad_completada, talla, color, orden_id)
+                VALUES (:lid, 'camiseta', 'Camiseta de Prueba de Seed', :cant, :cant, 'MIXTA', 'Azul', :oid)
+            """), {
+                "lid": linea_id,
+                "cant": piezas,
+                "oid": ord_id
             })
             
             # Asignación
